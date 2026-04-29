@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/layout/Header';
+import { ThemeProvider } from '../components/layout/ThemeProvider';
+import Footer from '../components/layout/Footer.astro';
+import PostCard from '../components/post/PostCard.astro';
+import { POSTS_PER_PAGE, SITE } from '../consts';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+const posts = sortedPosts.slice(0, POSTS_PER_PAGE);
+const hasMore = sortedPosts.length > POSTS_PER_PAGE;
+
+// Aggregate all tags for the top tag bar
+const tagCount: Record<string, number> = {};
+allPosts.forEach((p) => p.data.tags.forEach((t) => tagCount[t] = (tagCount[t] || 0) + 1));
+const allTags = Object.entries(tagCount).sort(([, a], [, b]) => b - a).map(([tag, count]) => ({ tag, count }));
+---
+
+<BaseLayout title={SITE.name} description={SITE.description}>
+  <ThemeProvider client:load>
+    <Header client:load tags={allTags} />
+  </ThemeProvider>
+  <main class="flex-1">
+    <!-- Hero Section -->
+    <section class="relative min-h-[60vh] flex flex-col items-center justify-center px-4 py-16 md:py-24 overflow-hidden">
+      <div class="absolute top-8 left-8 opacity-80"><svg width="48" height="48" viewBox="0 0 48 48"><defs><pattern id="h1" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#111" opacity="0.8"/></pattern></defs><rect width="48" height="48" fill="url(#h1)"/></svg></div>
+      <div class="absolute top-12 right-12 opacity-80"><svg width="32" height="32" viewBox="0 0 32 32"><defs><pattern id="h2" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#A3E635" opacity="0.8"/></pattern></defs><rect width="32" height="32" fill="url(#h2)"/></svg></div>
+      <div class="absolute bottom-16 left-16 opacity-80"><svg width="24" height="24" viewBox="0 0 24 24"><defs><pattern id="h3" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#A3E635" opacity="0.8"/></pattern></defs><rect width="24" height="24" fill="url(#h3)"/></svg></div>
+      <div class="absolute bottom-8 right-8 opacity-80"><svg width="40" height="40" viewBox="0 0 40 40"><defs><pattern id="h4" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.5" fill="#111" opacity="0.8"/></pattern></defs><rect width="40" height="40" fill="url(#h4)"/></svg></div>
+
+      <div class="relative z-10 text-center max-w-2xl mx-auto">
+        <h1 class="font-display text-4xl md:text-6xl font-bold mb-4 tracking-tight" style={{ color: 'var(--text-primary)' }}>{SITE.name}</h1>
+        <p class="font-mono text-sm md:text-base mb-2" style={{ color: 'var(--text-secondary)' }}><span style={{ color: '#84CC16' }}>&gt;</span> INITIALIZING SEQUENCE...</p>
+        <p class="font-mono text-sm md:text-base" style={{ color: 'var(--text-secondary)' }}><span style={{ color: '#84CC16' }}>&gt;</span> TRACE LOGS FROM A DEVELOPER<span class="inline-block w-2 h-4 bg-[#A3E635] ml-1 animate-cursor-blink align-middle"></span></p>
+      </div>
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 animate-bounce">
+        <span class="font-mono text-[#A3E635] text-lg">&#9660;</span>
+      </div>
+    </section>
+
+    <div class="font-mono text-xs text-center my-6" style={{ color: 'var(--text-secondary)' }} aria-hidden="true">// ============================ //</div>
+
+    <!-- Posts Section -->
+    <section class="max-w-4xl mx-auto px-4 md:px-8 py-12">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="font-display text-lg md:text-xl font-bold uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>// LATEST POSTS</h2>
+        <a href="/posts/" class="font-mono text-xs uppercase tracking-wider transition-colors hover:text-[#A3E635]" style={{ color: 'var(--text-secondary)' }}>VIEW ALL &rarr;</a>
+      </div>
+      {posts.length > 0 ? (
+        <div class="space-y-6">{posts.map((post) => <PostCard post={post} />)}</div>
+      ) : (
+        <div class="text-center py-16 border border-dashed" style={{ borderColor: 'var(--border-dim)' }}><p class="font-mono text-sm" style={{ color: 'var(--text-secondary)' }}>No posts yet.</p></div>
+      )}
+      {hasMore && (
+        <div class="mt-8 text-center">
+          <a href="/posts/" class="inline-flex items-center justify-center px-4 py-2 font-mono text-xs uppercase tracking-wider border transition-all duration-200 hover:border-[#A3E635] hover:text-[#A3E635]" style={{ borderColor: 'var(--border-dim)', color: 'var(--text-secondary)', background: 'transparent' }}>LOAD MORE</a>
+        </div>
+      )}
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+import { formatDate } from '../../utils/formatDate';
+import { calculateReadingTime } from '../../utils/readingTime';
+import Tag from '../ui/Tag.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+}
+const { post } = Astro.props;
+const { title, date, tags } = post.data;
+const readingTime = calculateReadingTime(post.body);
+---
+
+<div class="mb-8">
+  <div class="flex flex-wrap items-center gap-2 mb-4">
+    <span class="font-mono text-[11px] uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
+      {formatDate(date)}
+    </span>
+    <span class="font-mono text-[10px]" style={{ color: 'var(--border-dim)' }}>|</span>
+    <span class="font-mono text-[10px] uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>
+      {readingTime}
+    </span>
+  </div>
+  <h1 class="font-sans text-2xl md:text-3xl font-semibold mb-4 leading-tight" style={{ color: 'var(--text-primary)' }}>
+    {title}
+  </h1>
+  {tags.length > 0 && (
+    <div class="flex items-center gap-1.5 flex-wrap">
+      <span class="font-mono text-[10px] mr-1" style={{ color: '#84CC16' }}>$ tags</span>
+      {tags.map((tag) => (
+        <Tag tag={tag} href={`/tags/${tag}/`} />
+      ))}
+    </div>
+  )}
+</div>

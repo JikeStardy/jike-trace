@@ -1,0 +1,35 @@
+---
+interface Props {
+  tag: string;
+  href?: string;
+  count?: number;
+}
+const { tag, href, count } = Astro.props;
+---
+
+{href ? (
+  <a
+    href={href}
+    class="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider border transition-all duration-200 hover:bg-[#A3E635] hover:text-[#0A0A0A] hover:border-[#A3E635]"
+    style={{ borderColor: 'var(--border-dim)', color: 'var(--text-secondary)', background: 'transparent', padding: '2px 8px' }}
+  >
+    <span style={{ color: 'var(--accent-lime-dim)', opacity: 0.7 }}>[</span>
+    <span>{tag}</span>
+    <span style={{ color: 'var(--accent-lime-dim)', opacity: 0.7 }}>]</span>
+    {count !== undefined && count > 1 && <span class="ml-0.5 opacity-60">x{count}</span>}
+  </a>
+) : (
+  <span
+    class="inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-wider border"
+    style={{ borderColor: 'var(--border-dim)', color: 'var(--text-secondary)', background: 'transparent', padding: '2px 8px' }}
+  >
+    <span style={{ color: 'var(--accent-lime-dim)', opacity: 0.7 }}>[</span>
+    <span>{tag}</span>
+    <span style={{ color: 'var(--accent-lime-dim)', opacity: 0.7 }}>]</span>
+    {count !== undefined && count > 1 && <span class="ml-0.5 opacity-60">x{count}</span>}
+  </span>
+)}
+
+<style>
+  a:hover span { color: inherit !important; opacity: 1 !important; }
+</style>

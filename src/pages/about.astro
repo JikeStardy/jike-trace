@@ -1,0 +1,37 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+---
+
+<PageLayout title="About" description="About Jike Trace blog">
+  <div class="mb-8">
+    <h1 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-primary)' }}>// ABOUT</h1>
+  </div>
+  <div class="border-t my-6" style={{ borderColor: 'var(--border-dim)' }}></div>
+  <div class="prose-terminal">
+    <p><strong>Jike Trace</strong> is a terminal-style static blog built for developers who love the aesthetics of early computing interfaces.</p>
+    <h2>Philosophy</h2>
+    <blockquote>The essence of design is the difference that must exist after eliminating all unnecessary differences.</blockquote>
+    <p>This blog embraces:</p>
+    <ul>
+      <li><strong>Terminal aesthetics</strong> — Monospace fonts, sharp corners, and pixel decorations</li>
+      <li><strong>Engineering culture</strong> — A reading space that resonates with developer identity</li>
+      <li><strong>Zero-friction writing</strong> — Local Markdown, Git Push to publish</li>
+      <li><strong>Performance first</strong> — Static output, &lt; 1.5s first paint</li>
+    </ul>
+    <h2>Tech Stack</h2>
+    <table><thead><tr><th>Layer</th><th>Technology</th></tr></thead><tbody>
+      <tr><td>Framework</td><td>Astro</td></tr>
+      <tr><td>Styling</td><td>Tailwind CSS</td></tr>
+      <tr><td>Components</td><td>React</td></tr>
+      <tr><td>Fonts</td><td>JetBrains Mono + Inter</td></tr>
+      <tr><td>Hosting</td><td>GitHub Pages</td></tr>
+    </tbody></table>
+    <h2>Contact</h2>
+    <ul>
+      <li>GitHub: <a href="https://github.com/JikeStardy" target="_blank" rel="noopener noreferrer">@JikeStardy</a></li>
+      <li>RSS: <a href="/feed.xml">/feed.xml</a></li>
+    </ul>
+    <hr />
+    <p><em>Built with precision and attention to detail.</em></p>
+  </div>
+</PageLayout>

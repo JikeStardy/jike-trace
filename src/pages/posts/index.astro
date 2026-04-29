@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import PostCard from '../../components/post/PostCard.astro';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const sortedPosts = allPosts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+
+const tagCount: Record<string, number> = {};
+allPosts.forEach((p) => p.data.tags.forEach((t) => tagCount[t] = (tagCount[t] || 0) + 1));
+const allTags = Object.entries(tagCount).sort(([, a], [, b]) => b - a).map(([tag, count]) => ({ tag, count }));
+---
+
+<PageLayout title="Posts" description="All blog posts" tags={allTags}>
+  <div class="mb-8">
+    <h1 class="font-display text-2xl md:text-3xl font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-primary)' }}>// ALL POSTS</h1>
+    <p class="font-mono text-xs uppercase tracking-wider" style={{ color: 'var(--text-secondary)' }}>TOTAL: {sortedPosts.length} ARTICLES</p>
+  </div>
+  <div class="border-t my-6" style={{ borderColor: 'var(--border-dim)' }}></div>
+  {sortedPosts.length > 0 ? (
+    <div class="space-y-6">{sortedPosts.map((post) => <PostCard post={post} />)}</div>
+  ) : (
+    <div class="text-center py-16 border border-dashed" style={{ borderColor: 'var(--border-dim)' }}><p class="font-mono text-sm" style={{ color: 'var(--text-secondary)' }}>No posts found.</p></div>
+  )}
+</PageLayout>

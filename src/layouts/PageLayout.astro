@@ -1,0 +1,23 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Header from '../components/layout/Header';
+import { ThemeProvider } from '../components/layout/ThemeProvider';
+import Footer from '../components/layout/Footer.astro';
+interface Props {
+  title: string;
+  description?: string;
+  tags?: { tag: string; count: number }[];
+}
+const { title, description, tags } = Astro.props;
+---
+<BaseLayout title={title} description={description}>
+  <ThemeProvider client:load>
+    <Header client:load tags={tags} />
+  </ThemeProvider>
+  <main class="flex-1 w-full max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12">
+    <div class="max-w-reading mx-auto">
+      <slot />
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

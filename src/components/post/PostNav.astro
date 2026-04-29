@@ -1,0 +1,32 @@
+---
+interface Props {
+  prevPost?: { slug: string; title: string } | null;
+  nextPost?: { slug: string; title: string } | null;
+}
+const { prevPost, nextPost } = Astro.props;
+---
+
+{(prevPost || nextPost) && (
+  <nav class="border-t pt-6 mt-12" style={{ borderColor: 'var(--border-default)' }}>
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      {prevPost ? (
+        <a href={`/posts/${prevPost.slug}/`} class="group flex items-start gap-2 font-mono text-sm transition-colors hover:text-[#A3E635]" style={{ color: 'var(--text-primary)' }}>
+          <span class="mt-0.5 transition-colors" style={{ color: 'var(--text-secondary)' }}>&lt;&lt;</span>
+          <div class="flex flex-col">
+            <span class="text-[10px] uppercase tracking-wider mb-1" style={{ color: 'var(--text-secondary)' }}>Previous</span>
+            <span class="line-clamp-1">{prevPost.title}</span>
+          </div>
+        </a>
+      ) : <div />}
+      {nextPost ? (
+        <a href={`/posts/${nextPost.slug}/`} class="group flex items-start gap-2 font-mono text-sm transition-colors hover:text-[#A3E635] md:text-right" style={{ color: 'var(--text-primary)' }}>
+          <div class="flex flex-col md:items-end">
+            <span class="text-[10px] uppercase tracking-wider mb-1" style={{ color: 'var(--text-secondary)' }}>Next</span>
+            <span class="line-clamp-1">{nextPost.title}</span>
+          </div>
+          <span class="mt-0.5 transition-colors" style={{ color: 'var(--text-secondary)' }}>&gt;&gt;</span>
+        </a>
+      ) : <div />}
+    </div>
+  </nav>
+)}

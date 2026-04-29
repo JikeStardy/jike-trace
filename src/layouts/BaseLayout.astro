@@ -1,0 +1,85 @@
+---
+import { SITE } from '../consts';
+import '../assets/styles/global.css';
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = SITE.title, description = SITE.description } = Astro.props;
+const pageTitle = title === SITE.name ? title : `${title} | ${SITE.name}`;
+---
+<!doctype html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <title>{pageTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/feed.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script is:inline>
+      // 1. Theme init (before render to prevent flash)
+      (function() {
+        try {
+          var t = localStorage.getItem('theme');
+          if (!t) t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          if (t === 'dark') document.documentElement.classList.add('dark');
+        } catch(e) {}
+      })();
+    </script>
+    <script is:inline src="/router.js"></script>
+    <script is:inline>
+      // 2. Global native theme toggle handler - survives innerHTML replacement
+      (function() {
+        function updateThemeIcons() {
+          var isDark = document.documentElement.classList.contains('dark');
+          var btns = document.querySelectorAll('[data-theme-toggle]');
+          var moonSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>';
+          var sunSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+          btns.forEach(function(btn) {
+            btn.innerHTML = isDark ? sunSvg : moonSvg;
+          });
+        }
+        
+        // Run on initial load + after any SPA navigation
+        document.addEventListener('click', function(e) {
+          var btn = e.target.closest('[data-theme-toggle]');
+          if (!btn) return;
+          e.preventDefault();
+          e.stopPropagation();
+          var isDark = document.documentElement.classList.contains('dark');
+          var newTheme = isDark ? 'light' : 'dark';
+          document.documentElement.classList.toggle('dark', !isDark);
+          try { localStorage.setItem('theme', newTheme); } catch(e) {}
+          updateThemeIcons();
+          window.dispatchEvent(new CustomEvent('theme-change', { detail: newTheme }));
+        }, true);
+
+        // Update icons after router navigation
+        window.addEventListener('hashchange', function() {
+          setTimeout(updateThemeIcons, 50);
+        });
+        
+        // Initial icon setup
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', updateThemeIcons);
+        } else {
+          updateThemeIcons();
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col relative">
+    <div class="fixed inset-0 pointer-events-none z-0 pixel-grid" aria-hidden="true"></div>
+    <div class="relative z-10 flex flex-col min-h-screen">
+      <slot />
+    </div>
+  </body>
+</html>
