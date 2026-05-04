@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   site: 'https://jikestardy.github.io',
+  base: '/jike-trace',
   output: 'static',
   trailingSlash: 'always',
   integrations: [react(), tailwind({ applyBaseStyles: false }), sitemap()],
