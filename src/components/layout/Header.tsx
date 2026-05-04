@@ -3,6 +3,8 @@ import { Menu, Rss } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { SITE, NAV_LINKS } from '../../consts';
 
+const BASE = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+
 interface TagBarProps {
   tags: { tag: string; count: number }[];
 }
@@ -21,7 +23,7 @@ function TopTagBar({ tags }: TagBarProps) {
         {tags.map(({ tag, count }) => (
           <a
             key={tag}
-            href={`/tags/${tag}/`}
+            href={`${BASE}/tags/${tag}/`}
             className="font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 border transition-all duration-200 hover:bg-[#A3E635] hover:text-[#0A0A0A] hover:border-[#A3E635] shrink-0"
             style={{ borderColor: 'var(--border-dim)', color: 'var(--text-secondary)', background: 'transparent' }}
           >
@@ -42,7 +44,7 @@ export default function Header({ tags }: { tags?: { tag: string; count: number }
       <header className="sticky top-0 z-50" style={{ borderColor: 'var(--border-default)', backgroundColor: 'var(--bg-primary)' }}>
         <div className="border-b" style={{ borderColor: 'var(--border-default)' }}>
           <div className="max-w-6xl mx-auto px-4 md:px-8 h-14 flex items-center justify-between">
-            <a href="/" className="font-display font-bold text-lg tracking-tight transition-colors hover:text-[#A3E635]" style={{ color: 'var(--text-primary)' }}>
+            <a href={`${BASE}/`} className="font-display font-bold text-lg tracking-tight transition-colors hover:text-[#A3E635]" style={{ color: 'var(--text-primary)' }}>
               {SITE.name}
             </a>
             <nav className="hidden md:flex items-center gap-1">
@@ -63,7 +65,7 @@ export default function Header({ tags }: { tags?: { tag: string; count: number }
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 )}
               </button>
-              <a href="/feed.xml" target="_blank" className="hidden md:flex p-2 border transition-all duration-200 hover:bg-[#A3E635] hover:text-[#0A0A0A]" style={{ borderColor: 'var(--border-default)', color: 'var(--text-primary)' }} aria-label="RSS Feed">
+              <a href={`${BASE}/feed.xml`} target="_blank" className="hidden md:flex p-2 border transition-all duration-200 hover:bg-[#A3E635] hover:text-[#0A0A0A]" style={{ borderColor: 'var(--border-default)', color: 'var(--text-primary)' }} aria-label="RSS Feed">
                 <Rss size={16} />
               </a>
               <button onClick={() => setMobileOpen(true)} className="md:hidden p-2 border transition-all duration-200 hover:bg-[#A3E635] hover:text-[#0A0A0A]" style={{ borderColor: 'var(--border-default)', color: 'var(--text-primary)' }} aria-label="Open menu">

@@ -1,3 +1,5 @@
+const BASE = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
+
 export const SITE = {
   name: 'Jike Trace',
   title: 'Jike Trace - Trace Logs From A Developer',
@@ -6,14 +8,14 @@ export const SITE = {
   lang: 'zh-CN',
   author: 'JikeStardy',
   github: 'https://github.com/JikeStardy',
-  rss: '/feed.xml',
+  rss: `${BASE}/feed.xml`,
 } as const;
 
 export const NAV_LINKS = [
-  { href: '/posts/', label: 'POSTS' },
-  { href: '/archive/', label: 'ARCHIVE' },
-  { href: '/tags/', label: 'TAGS' },
-  { href: '/about/', label: 'ABOUT' },
+  { href: `${BASE}/posts/`, label: 'POSTS' },
+  { href: `${BASE}/archive/`, label: 'ARCHIVE' },
+  { href: `${BASE}/tags/`, label: 'TAGS' },
+  { href: `${BASE}/about/`, label: 'ABOUT' },
 ] as const;
 
 export const POSTS_PER_PAGE = 10;

@@ -1,5 +1,6 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
+const BASE = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
 ---
 
 <PageLayout title="About" description="About Jike Trace blog">
@@ -29,7 +30,7 @@ import PageLayout from '../layouts/PageLayout.astro';
     <h2>Contact</h2>
     <ul>
       <li>GitHub: <a href="https://github.com/JikeStardy" target="_blank" rel="noopener noreferrer">@JikeStardy</a></li>
-      <li>RSS: <a href="/feed.xml">/feed.xml</a></li>
+      <li>RSS: <a href={`${BASE}/feed.xml`}>/feed.xml</a></li>
     </ul>
     <hr />
     <p><em>Built with precision and attention to detail.</em></p>

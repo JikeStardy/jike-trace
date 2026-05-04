@@ -17,6 +17,7 @@ export async function getStaticPaths() {
 }
 
 const { tag, posts } = Astro.props;
+const BASE = (import.meta.env.BASE_URL || '').replace(/\/$/, '');
 ---
 
 <PageLayout title={`Tag: ${tag}`} description={`Posts tagged with ${tag}`}>
@@ -31,6 +32,6 @@ const { tag, posts } = Astro.props;
     <div class="text-center py-16 border border-dashed" style={{ borderColor: 'var(--border-dim)' }}><p class="font-mono text-sm" style={{ color: 'var(--text-secondary)' }}>No posts found with this tag.</p></div>
   )}
   <div class="mt-8">
-    <a href="/tags/" class="font-mono text-xs uppercase tracking-wider transition-colors hover:text-[#A3E635]" style={{ color: 'var(--text-secondary)' }}>&larr; ALL TAGS</a>
+    <a href={`${BASE}/tags/`} class="font-mono text-xs uppercase tracking-wider transition-colors hover:text-[#A3E635]" style={{ color: 'var(--text-secondary)' }}>&larr; ALL TAGS</a>
   </div>
 </PageLayout>
